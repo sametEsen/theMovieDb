@@ -20,12 +20,6 @@ class Header extends Component{
             
               <Col className="d-none d-lg-flex justify-content-start">
                 <Nav className="mrx-auto" navbar>
-                
-                  {/* <NavItem className="d-flex align-items-center">
-                    <NavLink className="font-weight-bold" href="/">
-                      <img src={AVATAR} alt="avatar" className="img-fluid rounded-circle" style={{ width: 36 }} />
-                    </NavLink>
-                  </NavItem> */}
                   
                   <NavItem className="d-flex align-items-center">
                     <NavLink className="font-weight-bold" href="/">Home</NavLink>
