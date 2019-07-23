@@ -86,7 +86,7 @@ class Home extends Component{
                     </Table>                
                 </Row>
                 <Row>
-                    <Col className="pb-5 mb-5 pb-md-0 mb-md-0 mx-auto mx-md-0">
+                    <Col style={{textAlign: 'left'}}>
                         <Button onClick={this.PreviousPage} disabled={this.state.page === 1}>
                             Previous
                         </Button>
@@ -94,6 +94,10 @@ class Home extends Component{
                         <Button onClick={this.NextPage} disabled={this.state.page === this.state.total_pages}>
                             Next
                         </Button>
+                    </Col>
+                    <Col style={{textAlign: 'right'}}>
+                        Currently showing {this.state.page} of {this.state.total_pages} <br/>
+                        Total result: {this.state.total_results}
                     </Col>
                 </Row>
             </Fragment>
