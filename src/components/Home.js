@@ -1,60 +1,54 @@
-import React, { Component, Fragment} from 'react'
-import { Col, Row, Table, Button } from 'react-bootstrap';
-import MovieTableRow from './MovieTableRow'
+import React, {Component, Fragment } from 'react';
+import { Row, Col, Image } from 'react-bootstrap';
+import { Card, CardImg } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import '../styles/customHome.css'
 
 const api = {
-    url: 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc',
-    token: '733e8306f58919439c581f47d91fa5f7'
+    url: 'https://api.themoviedb.org/3/trending/all/week',
+    peopleUrl: 'https://api.themoviedb.org/3/person/popular',
+    token: '733e8306f58919439c581f47d91fa5f7',
+    baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2"
 }
 class Home extends Component{
     state = { 
-        page: 1,
-        movies : [], 
-        total_pages: 0,
-        total_results: 0
+        page: 0,
+        movies: {},
+        randomMovie: {},
+        popularPeople: []
     }
 
     componentDidMount(){
-        this.GetMovies();
+        this.GetTrendingMovies();
+        this.GetPopularPeople();
     }
 
-    NextPage = () =>{
-        console.log(this.state.page);
-            this.setState((prev, _) => {
-                return(
-                    {page: prev.page + 1}
-                )
-            },
-            () => { 
-                if(this.state.page <= this.state.total_pages)
-                    this.GetMovies()
-            }
-        );
-    }
-
-    PreviousPage = () =>{
-            this.setState((prev, _) => {
-                return(
-                    {page: prev.page - 1}
-                )
-            },
-            () => { 
-                if(this.state.page > 0)
-                    this.GetMovies()
-            }
-        );
-    }
-
-    GetMovies = () => {
-        fetch(api.url + "&page=" + this.state.page + "&api_key=" + api.token , { method: 'GET' })
+    GetTrendingMovies = () => {
+        const min = 1;
+        const max = 100;
+        const rand = Math.floor(min + Math.random() * (max - min));
+        
+        fetch(api.url + "?page=" + rand + "&api_key=" + api.token , { method: 'GET' })
         .then(response =>  response.json())
         .then(data => {
             if(data != null){
                 this.setState({ 
                     page: data.page,
                     movies: data.results,
-                    total_pages: data.total_pages,
-                    total_results: data.total_results
+                    randomMovie: data.results[Math.floor(Math.random() * 
+                        data.results.length)]
+                });
+            }
+        });
+    }
+
+    GetPopularPeople = () => {
+        fetch(api.peopleUrl + "?api_key=" + api.token , { method: 'GET' })
+        .then(response =>  response.json())
+        .then(data => {
+            if(data != null){
+                this.setState({ 
+                    popularPeople: data.results
                 });
             }
         });
@@ -63,43 +57,115 @@ class Home extends Component{
     render(){
         return(
             <Fragment>
-                <Row noGutters className="pt-2 pt-md-5 w-100 px-4 px-xl-0 position-relative">
-                    <Table size="sm">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Poster</th>
-                                <th>Name</th>
-                                <th>Release Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        {
-                            this.state.movies.length > 0
-                            ? 
-                                this.state.movies.map((movie, i) => (
-                                    <MovieTableRow key={movie.id} item={movie} />
-                                ))
-                            : 
-                            null
-                        }
-                    </Table>                
-                </Row>
-                <Row>
-                    <Col style={{textAlign: 'left'}}>
-                        <Button onClick={this.PreviousPage} disabled={this.state.page === 1}>
-                            Previous
-                        </Button>
-                        |
-                        <Button onClick={this.NextPage} disabled={this.state.page === this.state.total_pages}>
-                            Next
-                        </Button>
-                    </Col>
-                    <Col style={{textAlign: 'right'}}>
-                        Currently showing {this.state.page} of {this.state.total_pages} <br/>
-                        Total result: {this.state.total_results}
-                    </Col>
-                </Row>
+                {
+                    this.state.movies.length > 0 ? 
+                    <Row>
+                        <Col xs={6} md={3}>
+                            <Row>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[0].id
+                                        }
+                                    }}>
+                                        <Card>
+                                            <CardImg top src={api.baseImageUrl + this.state.movies[0].poster_path} alt={this.state.movies[0].title} />
+                                        </Card>
+                                    </Link>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[1].id
+                                        }
+                                    }}>
+                                        <CardImg top src={api.baseImageUrl + this.state.movies[1].poster_path} alt={this.state.movies[1].title} /> 
+                                    </Link>
+                                </Col>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[2].id
+                                        }
+                                    }}>
+                                        <CardImg top src={api.baseImageUrl + this.state.movies[2].poster_path} alt={this.state.movies[2].title} />
+                                    </Link>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col xs={6} md={3}>
+                            <Row>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[3].id
+                                        }
+                                    }}>
+                                        <CardImg top src={api.baseImageUrl + this.state.movies[3].poster_path} alt={this.state.movies[1].title} />
+                                    </Link>
+                                </Col>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[4].id
+                                        }
+                                    }}>
+                                        <CardImg top src={api.baseImageUrl + this.state.movies[4].poster_path} alt={this.state.movies[2].title} />
+                                    </Link>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col style={{paddingRight: "0", paddingLeft: "0"}}>
+                                    <Link to={{
+                                        pathname: '/moviedetails',
+                                        state: {
+                                            movieid: this.state.movies[5].id
+                                        }
+                                    }}>
+                                        <Card>
+                                            <CardImg top src={api.baseImageUrl + this.state.movies[5].poster_path} alt={this.state.movies[0].title} />
+                                        </Card>
+                                    </Link>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col xs={12} md={6}>
+                            <Link to={{
+                                pathname: '/moviedetails',
+                                state: {
+                                    movieid: this.state.randomMovie.id
+                                }
+                            }}>
+                                <Image src={api.baseImageUrl + this.state.randomMovie.poster_path} className="bgImage" style={{ width: "75%" }} />
+                                <div className="bgText">
+                                    <h2>{this.state.randomMovie.original_title}</h2>
+                                    <p>{this.state.randomMovie.overview}</p>
+                                </div>
+                            </Link>
+                        </Col>
+                    </Row> 
+                    : null
+                }
+                {/* {
+                    this.state.popularPeople.length > 0 ?
+                    <Row>
+                        <Col>
+                            {
+                                this.state.popularPeople.map((people) => {
+                                    return <h2 key={people.id}>{people.name}</h2>
+                                })
+                            }
+                        </Col>
+                    </Row>
+                    : null
+                } */}
             </Fragment>
         )
     }

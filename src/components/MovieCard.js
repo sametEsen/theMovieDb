@@ -14,7 +14,7 @@ class MovieCard extends Component {
     movie: this.props.movie
   }
   render(){
-    const BANNER = constants.baseImageUrl + this.state.movie.backdrop_path;
+    const BANNER = constants.baseImageUrl + this.state.movie.poster_path;
     return(
       <Fragment>
         <Row>
