@@ -6,7 +6,6 @@ import '../styles/customHome.css'
 
 const api = {
     url: 'https://api.themoviedb.org/3/trending/all/week',
-    peopleUrl: 'https://api.themoviedb.org/3/person/popular',
     token: '733e8306f58919439c581f47d91fa5f7',
     baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2"
 }
@@ -20,7 +19,6 @@ class Home extends Component{
 
     componentDidMount(){
         this.GetTrendingMovies();
-        this.GetPopularPeople();
     }
 
     GetTrendingMovies = () => {

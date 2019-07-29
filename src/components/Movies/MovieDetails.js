@@ -42,15 +42,6 @@ class MovieDetails extends Component{
                 this.state.movie && 
                 <div className="position-relative">
                     <Container>
-                        <Row>
-                            <Col md="12">
-                                <Link to={{
-                                    pathname: '/'
-                                }}>
-                                    Back to list
-                                </Link>
-                            </Col>
-                        </Row>
                         <MovieCard movie={this.state.movie} />
                     </Container>
                 </div>

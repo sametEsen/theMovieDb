@@ -32,7 +32,7 @@ class Header extends Component{
                   </NavItem> */}
                   
                   <NavItem className="d-flex align-items-center">
-                    <NavLink className="font-weight-bold" href="/" style={{color: "white"}}>PEOPLE</NavLink>
+                    <NavLink className="font-weight-bold" href="/popular-people" style={{color: "white"}}>PEOPLE</NavLink>
                   </NavItem>
                   {/* <UncontrolledDropdown className="d-flex align-items-center" nav inNavbar>
                     <DropdownToggle className="font-weight-bold" nav caret>Learn</DropdownToggle>
