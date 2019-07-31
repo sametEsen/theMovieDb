@@ -1,17 +1,28 @@
 import React, { Component, Fragment} from 'react'
 import StringLimitation from '../Utilities/StringLimitation'
 import { Link } from 'react-router-dom'
-import { Col, Row, Image, Button } from 'react-bootstrap';
+import { Col, Row, Image, Button, Dropdown } from 'react-bootstrap';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
+import Select from 'react-select';
 import '../../styles/customDiscover.css'
 import 'react-circular-progressbar/dist/styles.css';
 
 const api = {
-    searchUrl: 'https://api.themoviedb.org/3/discover/movie?api_key=<<api_key>>&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=horror&with_keywords=commedy&year=2019',
-    url: 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc',
+    searchUrl: 'https://api.themoviedb.org/3/discover/movie',
     token: '733e8306f58919439c581f47d91fa5f7',
-    baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2/"
-}
+    baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2/",
+    last50Years: [],
+    sortingList:[
+        { label: "Popularity Descending", value: "popularity.desc" },
+        { label: "Popularity Ascending", value: "popularity.asc" },
+        { label: "Rating Descending", value: "vote_average.desc" },
+        { label: "Rating Ascending", value: "vote_average.asc" },
+        { label: "Release Date Descending", value: "primary_release_date.desc" },
+        { label: "Release Date Ascending", value: "primary_release_date.asc" },
+        { label: "Title (A-Z)", value: "title.asc" },
+        { label: "Title (Z-A)", value: "title.desc" }
+    ]
+};
 class Discover extends Component{
     state = { 
         page: 1,
@@ -25,11 +36,22 @@ class Discover extends Component{
     }
     
     componentDidMount(){
+        this.PrepareYears();
         this.GetMovies();
     }
 
+    PrepareYears = () => {
+        var d = new Date();
+        var currentYear = d.getFullYear();
+        var min = currentYear - 50;
+        for (let index = currentYear; index >= min; index--) {
+            api.last50Years.push(
+                { label: index.toString(), value: index }
+            );
+        }
+    }
+
     NextPage = () =>{
-        console.log(this.state.page);
             this.setState((prev, _) => {
                 return(
                     {page: prev.page + 1}
@@ -56,7 +78,20 @@ class Discover extends Component{
     }
 
     GetMovies = () => {
-        fetch(api.url + "&page=" + this.state.page + "&api_key=" + api.token , { method: 'GET' })
+        var url = api.searchUrl + "?api_key=" + api.token + "&page=" + this.state.page;
+        if(this.state.genres.length > 0){
+            url += "&with_genres=" + this.state.genres;
+        }
+        if(this.state.sortBy.length > 0){
+            url += "&sort_by=" + this.state.sortBy;
+        }
+        if(this.state.keyword.length > 0){
+            url += "&with_keywords=" + this.state.keyword;
+        }
+        if(this.state.year > 0){
+            url += "&year=" + this.state.year;
+        }
+        fetch(url, { method: 'GET' })
         .then(response =>  response.json())
         .then(data => {
             if(data != null){
@@ -70,9 +105,45 @@ class Discover extends Component{
         });
     }
 
+    YearFilter = (e) => {
+        this.setState({
+            year: e.value
+        },
+        () => { 
+            this.GetMovies();
+        });
+    }
+
+    SortFilter = (e) => {
+        this.setState({
+            sortBy: e.value
+        },
+        () => { 
+            this.GetMovies();
+        });
+    }
+
     render(){
         return(
             <Fragment>
+                <Row>
+                    <Col>
+                        <span>Year</span>
+                        <Select options={api.last50Years} isSearchable={0} defaultValue={this.state.year} onChange={this.YearFilter}/>
+                    </Col>
+                    <Col>
+                        <span>Sort By</span>
+                        <Select options={api.sortingList} isSearchable={0} defaultValue={this.state.sortBy} onChange={this.SortFilter}/>
+                    </Col>
+                    <Col>
+                        <span>Genres</span>
+                        <Select options={api.sortingList} placeholder="Type genres"/>
+                    </Col>
+                    <Col>
+                        <span>Keywords</span>
+                        <input type="text" className="form-control" placeholder="Keywords"/>
+                    </Col>
+                </Row>
                 <Row>
                     <h2>Discover New Movies</h2>
                 </Row>
