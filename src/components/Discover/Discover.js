@@ -9,9 +9,13 @@ import 'react-circular-progressbar/dist/styles.css';
 
 const api = {
     searchUrl: 'https://api.themoviedb.org/3/discover/movie',
+    genreUrl: 'https://api.themoviedb.org/3/genre/list',
+    keywordListUrl: 'https://api.themoviedb.org/3/search/keyword',
     token: '733e8306f58919439c581f47d91fa5f7',
     baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2/",
     last50Years: [],
+    genresList: [],
+    keyWordList: [],
     sortingList:[
         { label: "Popularity Descending", value: "popularity.desc" },
         { label: "Popularity Ascending", value: "popularity.asc" },
@@ -31,13 +35,14 @@ class Discover extends Component{
         total_results: 0,
         year: 2019,
         sortBy: 'popularity.desc',
-        genres: '',
-        keyword: ''
+        genres: null,
+        keywords: []
     }
     
     componentDidMount(){
         this.PrepareYears();
         this.GetMovies();
+        this.GetGenres();
     }
 
     PrepareYears = () => {
@@ -79,14 +84,16 @@ class Discover extends Component{
 
     GetMovies = () => {
         var url = api.searchUrl + "?api_key=" + api.token + "&page=" + this.state.page;
-        if(this.state.genres.length > 0){
+        if(this.state.genres !== null){
             url += "&with_genres=" + this.state.genres;
         }
         if(this.state.sortBy.length > 0){
             url += "&sort_by=" + this.state.sortBy;
         }
-        if(this.state.keyword.length > 0){
-            url += "&with_keywords=" + this.state.keyword;
+        if(this.state.keywords.length > 0){
+            this.state.keywords.forEach(element => {
+                url += "&with_keywords=" + element;
+            });
         }
         if(this.state.year > 0){
             url += "&year=" + this.state.year;
@@ -103,6 +110,33 @@ class Discover extends Component{
                 });
             }
         });
+    }
+
+    GetGenres = () => {
+        fetch(api.genreUrl + "?api_key=" + api.token, { method: 'GET' })
+        .then(response =>  response.json())
+        .then(data => {
+            if(data != null){
+                data.genres.forEach(element => {
+                    api.genresList.push({ label: element.name, value: element.id });
+                });
+            }
+        });
+    }
+
+    handleKeywordChanges = (e) => {
+        if(e.length > 3){
+            var keyWordUrl = api.keywordListUrl + "?api_key=" + api.token + "&&query=" + e + "&page=1";
+            fetch(keyWordUrl, { method: 'GET' })
+            .then(response =>  response.json())
+            .then(data => {
+                if(data != null){
+                    data.results.forEach(element => {
+                        api.keyWordList.push({ label: element.name, value: element.id });
+                    });
+                }
+            });
+        }
     }
 
     YearFilter = (e) => {
@@ -123,6 +157,34 @@ class Discover extends Component{
         });
     }
 
+    GenreFilter = (e) => {
+        this.setState({
+            genres: e.value
+        },
+        () => { 
+            this.GetMovies();
+        });
+    }
+
+    KeywordFilter = (e) => {
+        var keyWordIds = [];
+        if(e){
+            keyWordIds = this.state.keywords;
+            e.forEach(element => {
+                keyWordIds.push(element.value);
+            });
+        }else{
+            keyWordIds = [];
+        }
+        console.log(keyWordIds);
+        this.setState({
+            keywords: keyWordIds
+        },
+        () => { 
+            this.GetMovies();
+        });
+    }
+
     render(){
         return(
             <Fragment>
@@ -137,11 +199,11 @@ class Discover extends Component{
                     </Col>
                     <Col>
                         <span>Genres</span>
-                        <Select options={api.sortingList} placeholder="Type genres"/>
+                        <Select options={api.genresList} placeholder="Type genres" onChange={this.GenreFilter}/>
                     </Col>
                     <Col>
                         <span>Keywords</span>
-                        <input type="text" className="form-control" placeholder="Keywords"/>
+                        <Select options={api.keyWordList} placeholder="Type keywords" isMulti onInputChange={this.handleKeywordChanges} onChange={this.KeywordFilter}/>
                     </Col>
                 </Row>
                 <Row>
