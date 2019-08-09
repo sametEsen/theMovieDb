@@ -1,20 +1,21 @@
 import React, {Component, Fragment } from 'react';
 import { Row, Col, Image } from 'react-bootstrap';
 import { Card, CardImg } from 'reactstrap';
-import { Link } from 'react-router-dom'
-import '../styles/customHome.css'
+import { Link } from 'react-router-dom';
+import '../styles/customHome.css';
 
 const api = {
-    url: 'https://api.themoviedb.org/3/trending/all/week',
+    url: 'https://api.themoviedb.org/3',
+    randomDiscoverUrl: '/trending/all/week',
     token: '733e8306f58919439c581f47d91fa5f7',
     baseImageUrl: "https://image.tmdb.org/t/p/w185_and_h278_bestv2"
 }
+
 class Home extends Component{
     state = { 
         page: 0,
         movies: {},
-        randomMovie: {},
-        popularPeople: []
+        randomMovie: {}
     }
 
     componentDidMount(){
@@ -26,7 +27,7 @@ class Home extends Component{
         const max = 100;
         const rand = Math.floor(min + Math.random() * (max - min));
         
-        fetch(api.url + "?page=" + rand + "&api_key=" + api.token , { method: 'GET' })
+        fetch(api.url + api.randomDiscoverUrl + "?page=" + rand + "&api_key=" + api.token , { method: 'GET' })
         .then(response =>  response.json())
         .then(data => {
             if(data != null){
@@ -40,23 +41,11 @@ class Home extends Component{
         });
     }
 
-    GetPopularPeople = () => {
-        fetch(api.peopleUrl + "?api_key=" + api.token , { method: 'GET' })
-        .then(response =>  response.json())
-        .then(data => {
-            if(data != null){
-                this.setState({ 
-                    popularPeople: data.results
-                });
-            }
-        });
-    }
-
     render(){
         return(
             <Fragment>
                 {
-                    this.state.movies.length > 0 ? 
+                    this.state.movies.length > 0 &&
                     <Row>
                         <Col xs={6} md={3}>
                             <Row>
@@ -148,22 +137,8 @@ class Home extends Component{
                                 </div>
                             </Link>
                         </Col>
-                    </Row> 
-                    : null
-                }
-                {/* {
-                    this.state.popularPeople.length > 0 ?
-                    <Row>
-                        <Col>
-                            {
-                                this.state.popularPeople.map((people) => {
-                                    return <h2 key={people.id}>{people.name}</h2>
-                                })
-                            }
-                        </Col>
                     </Row>
-                    : null
-                } */}
+                }
             </Fragment>
         )
     }

@@ -70,11 +70,10 @@ class People extends Component{
                 </Row>
                 <Row>
                 {
-                    this.state.popularPeople.length > 0 ?
+                    this.state.popularPeople.length > 0 &&
                     this.state.popularPeople.map((people) => {
                         return <PeopleCard key={people.id} popular_people={people}></PeopleCard>
-                    })                    
-                    : null
+                    })
                 }
                 </Row>
                 <Row style={{marginTop: "10px"}}>

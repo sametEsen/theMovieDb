@@ -1,0 +1,82 @@
+footer{
+
+    height: 450px;
+    box-sizing: border-box;
+    padding: 0;
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    background-image: url(https://www.themoviedb.org/assets/2/v4/footers_v2/AboutABoy-e2b7406d0ac18fe26478fbf1b39607dad5c679da4c61a54ec2c14a0198c47fa7.jpg), 
+                      radial-gradient(at 30% top, rgba(7, 64, 52, 1) 0%, rgba(8, 28, 36, 1) 70%);
+}
+footer nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+footer nav, footer nav a {
+    color: #fff;
+}
+footer nav div {
+    margin-right: 20px;
+    min-width: 0;
+    box-sizing: border-box;
+}
+footer nav div:last-child {
+    margin-right: 0;
+}
+footer nav div.join {
+    width: 230px;
+    text-align: right;
+    position: relative;
+    right: 0;
+    top: -36px;
+}
+footer nav div.join img {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+footer nav h3 {
+    margin-left: 35px;
+    font-weight: bold;
+    font-size: 1.4em;
+    line-height: 1.4em;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+}
+footer nav ul li {
+    line-height: 1.6em;
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+footer nav ul li a span.glyphicons {
+    top: 0;
+    font-size: 0.6em;
+}
+footer nav ul li a {
+    font-size: 1.2em;
+}
+footer nav a.rounded {
+    position: relative;
+    top: 140px;
+    border-color: #fff;
+    background-color: #fff;
+    color: #01d277;
+    font-size: 1.3em;
+    font-weight: bold;
+    display: inline-block;
+    word-wrap: break-word;
+    white-space: normal;
+    text-transform: uppercase;
+}
+footer nav a.rounded.logged_in {
+    text-transform: none;
+}

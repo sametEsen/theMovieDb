@@ -1,12 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import MovieCard from './MovieCard'
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
-// import { Image } from 'react-bootstrap'
-// import {
-//     Button,  Card, CardImg, CardBody,
-//     CardTitle, CardSubtitle, CardText
-//   } from 'reactstrap';
+import { Container } from 'react-bootstrap';
   
 const api = {
     url: "https://api.themoviedb.org/3/movie/",

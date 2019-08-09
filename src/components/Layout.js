@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
-
+import Footer from '../components/Footer'
 
 class Layout extends Component {
   
@@ -15,6 +15,7 @@ class Layout extends Component {
                 <Container className="px-0">{this.props.children}</Container>
             </main>
             
+            <Footer/>
         </Fragment>
       );
     }

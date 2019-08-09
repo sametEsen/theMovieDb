@@ -30,13 +30,11 @@ to={{
                             <CardText className="textOverFlow">
                                 {
                                     this.state.popular_people.known_for.length > 0 && this.state.popular_people.known_for[0].name != null ?
-                                        this.state.popular_people.known_for[0].name + " (" + 
-                                        this.state.popular_people.known_for[0].first_air_date.substring(0, 4)
-                                        + ")"
+                                        this.state.popular_people.known_for[0].name + 
+                                        " (" + this.state.popular_people.known_for[0].first_air_date.substring(0, 4) + ")"
                                     : this.state.popular_people.known_for.length > 0 &&  this.state.popular_people.known_for[0].title != null ?
-                                        this.state.popular_people.known_for[0].title + " (" + 
-                                        this.state.popular_people.known_for[0].release_date.substring(0, 4)
-                                        + ")"
+                                        this.state.popular_people.known_for[0].title + 
+                                        " (" + this.state.popular_people.known_for[0].release_date.substring(0, 4) + ")"
                                     : null
                                 }
                             </CardText>

@@ -1,7 +1,7 @@
 import React, { Component, Fragment} from 'react'
 import StringLimitation from '../Utilities/StringLimitation'
 import { Link } from 'react-router-dom'
-import { Col, Row, Image, Button, Dropdown } from 'react-bootstrap';
+import { Col, Row, Image, Button } from 'react-bootstrap';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import Select from 'react-select';
 import '../../styles/customDiscover.css'
@@ -27,6 +27,7 @@ const api = {
         { label: "Title (Z-A)", value: "title.desc" }
     ]
 };
+
 class Discover extends Component{
     state = { 
         page: 1,
@@ -176,7 +177,7 @@ class Discover extends Component{
         }else{
             keyWordIds = [];
         }
-        console.log(keyWordIds);
+
         this.setState({
             keywords: keyWordIds
         },
@@ -211,55 +212,52 @@ class Discover extends Component{
                 </Row>
                 <Row>
                     {
-                        this.state.movies.length > 0
-                        ? 
-                            this.state.movies.map((movie) => (
-                                <Col key={movie.id} xs={12} md={6} className="discoverMoviewBox">
-                                    <Row>
-                                        <Col md={4}>
-                                        <Image src={api.baseImageUrl + movie.poster_path} style={{width: '100%'}} />
-                                        </Col>
-                                        <Col md={8} style={{padding:'15px'}}>
-                                            <Row>
-                                                <Col md={2} style={{paddingLeft: '0'}}>
-                                                    <CircularProgressbar
-                                                        value={movie.vote_average * 10}
-                                                        text={`${movie.vote_average * 10}%`}
-                                                        background
-                                                        backgroundPadding={5}
-                                                        styles={buildStyles({
-                                                            backgroundColor: "black",
-                                                            textColor: "white",
-                                                            textSize: "28px",
-                                                            pathColor: "green",
-                                                            trailColor: "transparent"
-                                                        })}
-                                                    />
-                                                </Col>
-                                                <Col md={10} style={{paddingLeft: '0', marginTop: '-5px'}}>
-                                                    <StringLimitation text={movie.title} limit={25} styles={{marginBottom: '0', fontSize: '20px'}}/>
-                                                    <span style={{width: '100%', fontSize: '11px'}}>{movie.release_date}</span>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <StringLimitation text={movie.overview} limit={200}/>
-                                            </Row>
-                                            <Row className="discoverViewMore">
-                                                <Link to={{
-                                                    pathname: '/moviedetails',
-                                                    state: {
-                                                        movieid: movie.id
-                                                    }
-                                                }}>
-                                                    Details
-                                                </Link>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            ))
-                        : 
-                        null
+                        this.state.movies.length > 0 &&
+                        this.state.movies.map((movie) => (
+                            <Col key={movie.id} xs={12} md={6} className="discoverMoviewBox">
+                                <Row>
+                                    <Col md={4}>
+                                    <Image src={api.baseImageUrl + movie.poster_path} style={{width: '100%'}} />
+                                    </Col>
+                                    <Col md={8} style={{padding:'15px'}}>
+                                        <Row>
+                                            <Col md={2} style={{paddingLeft: '0'}}>
+                                                <CircularProgressbar
+                                                    value={movie.vote_average * 10}
+                                                    text={`${movie.vote_average * 10}%`}
+                                                    background
+                                                    backgroundPadding={5}
+                                                    styles={buildStyles({
+                                                        backgroundColor: "black",
+                                                        textColor: "white",
+                                                        textSize: "28px",
+                                                        pathColor: "green",
+                                                        trailColor: "transparent"
+                                                    })}
+                                                />
+                                            </Col>
+                                            <Col md={10} style={{paddingLeft: '0', marginTop: '-5px'}}>
+                                                <StringLimitation text={movie.title} limit={25} styles={{marginBottom: '0', fontSize: '20px'}}/>
+                                                <span style={{width: '100%', fontSize: '11px'}}>{movie.release_date}</span>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <StringLimitation text={movie.overview} limit={200}/>
+                                        </Row>
+                                        <Row className="discoverViewMore">
+                                            <Link to={{
+                                                pathname: '/moviedetails',
+                                                state: {
+                                                    movieid: movie.id
+                                                }
+                                            }}>
+                                                Details
+                                            </Link>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        ))
                     }
                 </Row>
                 <Row style={{marginTop: "10px"}}>
